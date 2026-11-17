@@ -1,0 +1,139 @@
+[
+  {
+    "topic": "SessionInfo",
+    "payload": {
+      "Key": 9999,
+      "Type": "Race",
+      "Name": "Race",
+      "StartDate": "2026-06-14T14:00:00Z",
+      "EndDate": "2026-06-14T16:00:00Z",
+      "GmtOffset": "02:00:00",
+      "Path": "demo/",
+      "Meeting": {
+        "Key": 999,
+        "Name": "Demo Grand Prix",
+        "OfficialName": "APEX FICTIONAL TEST GRAND PRIX",
+        "Location": "Circuito de pruebas",
+        "Country": { "Code": "TST", "Name": "Sesión de prueba" },
+        "Circuit": { "Key": 999, "ShortName": "APEX Test Circuit" }
+      }
+    },
+    "received_at": "2026-06-14T14:24:00Z"
+  },
+  {
+    "topic": "SessionStatus",
+    "payload": { "Status": "Started", "Message": "RaceStarted" },
+    "received_at": "2026-06-14T14:24:02Z"
+  },
+  {
+    "topic": "TrackStatus",
+    "payload": { "Status": "1", "Message": "AllClear" },
+    "received_at": "2026-06-14T14:24:02Z"
+  },
+  {
+    "topic": "LapCount",
+    "payload": { "CurrentLap": 24, "TotalLaps": 58 },
+    "received_at": "2026-06-14T14:24:03Z"
+  },
+  {
+    "topic": "ExtrapolatedClock",
+    "payload": { "Utc": "2026-06-14T14:24:03Z", "Remaining": "01:17:24", "Extrapolating": true, "ElapsedTrackTime": "00:24:03" },
+    "received_at": "2026-06-14T14:24:03Z"
+  },
+  {
+    "topic": "DriverList",
+    "payload": {
+      "1": { "RacingNumber": "1", "BroadcastName": "A ARDEN", "FullName": "Alex Arden", "Tla": "ARD", "Line": 1, "TeamName": "Northstar Racing", "TeamColour": "D6FA4B", "FirstName": "Alex", "LastName": "Arden", "Reference": "ALEARD01" },
+      "14": { "RacingNumber": "14", "BroadcastName": "M VEGA", "FullName": "Mara Vega", "Tla": "VEG", "Line": 2, "TeamName": "Cobalt GP", "TeamColour": "70B8FF", "FirstName": "Mara", "LastName": "Vega", "Reference": "MARVEG01" },
+      "27": { "RacingNumber": "27", "BroadcastName": "L SOL", "FullName": "Leo Sol", "Tla": "SOL", "Line": 3, "TeamName": "Ember Racing", "TeamColour": "FF7369", "FirstName": "Leo", "LastName": "Sol", "Reference": "LEOSOL01" }
+    },
+    "received_at": "2026-06-14T14:24:03Z"
+  },
+  {
+    "topic": "TimingDataF1",
+    "payload": {
+      "Lines": {
+        "1": { "Line": 1, "Position": "1", "GapToLeader": "", "IntervalToPositionAhead": { "Value": "" }, "LastLapTime": { "Value": "1:28.164" }, "BestLapTime": { "Value": "1:27.882" }, "NumberOfLaps": 23, "NumberOfPitStops": 1, "InPit": false, "PitOut": false, "Retired": false, "Stopped": false, "Sectors": [{ "Value": "28.122", "Segments": [{ "Status": 2048 }] }, { "Value": "34.015", "PersonalFastest": true }, { "Value": "26.027", "PersonalFastest": true }], "Speeds": { "I1": { "Value": "281" }, "I2": { "Value": "274" }, "FL": { "Value": "288" }, "ST": { "Value": "312" } } },
+        "14": { "Line": 2, "Position": "2", "GapToLeader": "3.421", "IntervalToPositionAhead": { "Value": "3.421" }, "LastLapTime": { "Value": "1:28.397" }, "BestLapTime": { "Value": "1:27.981" }, "NumberOfLaps": 23, "NumberOfPitStops": 1, "InPit": false, "PitOut": false, "Retired": false, "Stopped": false, "Sectors": [{ "Value": "28.095", "OverallFastest": true }, { "Value": "34.212" }, { "Value": "26.090" }], "Speeds": { "I1": { "Value": "284" }, "I2": { "Value": "270" }, "FL": { "Value": "287" }, "ST": { "Value": "318" } } },
+        "27": { "Line": 3, "Position": "3", "GapToLeader": "5.716", "IntervalToPositionAhead": { "Value": "2.295" }, "LastLapTime": { "Value": "1:28.922" }, "BestLapTime": { "Value": "1:28.202" }, "NumberOfLaps": 23, "NumberOfPitStops": 2, "InPit": true, "PitOut": false, "Retired": false, "Stopped": false, "Sectors": [{ "Value": "28.413" }, { "Value": "34.419" }, { "Value": "26.090", "PersonalFastest": true }], "Speeds": { "I1": { "Value": "275" }, "I2": { "Value": "268" }, "FL": { "Value": "280" }, "ST": { "Value": "309" } } }
+      }
+    },
+    "received_at": "2026-06-14T14:24:03Z"
+  },
+  {
+    "topic": "TimingAppData",
+    "payload": {
+      "Lines": {
+        "1": { "RacingNumber": "1", "Line": 1, "Stints": [{ "Compound": "MEDIUM", "New": "false", "TotalLaps": 18, "StartLaps": 0, "LapTime": "1:28.164", "LapNumber": 24, "StintNumber": 2 }] },
+        "14": { "RacingNumber": "14", "Line": 2, "Stints": [{ "Compound": "HARD", "New": "false", "TotalLaps": 12, "StartLaps": 0, "LapTime": "1:28.397", "LapNumber": 24, "StintNumber": 2 }] },
+        "27": { "RacingNumber": "27", "Line": 3, "Stints": [{ "Compound": "SOFT", "New": "true", "TotalLaps": 0, "StartLaps": 0, "LapTime": "1:28.922", "LapNumber": 24, "StintNumber": 3 }] }
+      }
+    },
+    "received_at": "2026-06-14T14:24:03Z"
+  },
+  {
+    "topic": "TimingData",
+    "payload": {
+      "Lines": {
+        "1": { "NumberOfLaps": 23, "Sectors": { "0": { "Value": "28.122" }, "1": { "Value": "34.015" } } },
+        "14": { "NumberOfLaps": 23, "Sectors": { "0": { "Value": "28.095" } } }
+      }
+    },
+    "received_at": "2026-06-14T14:23:59Z"
+  },
+  {
+    "topic": "TimingDataF1",
+    "payload": { "Lines": { "14": { "GapToLeader": "3.207", "IntervalToPositionAhead": { "Value": "3.207" } } } },
+    "received_at": "2026-06-14T14:24:04Z"
+  },
+  {
+    "topic": "WeatherData",
+    "payload": { "AirTemp": "24.1", "Humidity": "52", "AirPressure": "1011.5", "Rainfall": "0", "TrackTemp": "36.8", "WindDirection": "124", "WindSpeed": "8.4" },
+    "received_at": "2026-06-14T14:24:04Z"
+  },
+  {
+    "topic": "RaceControlMessages",
+    "payload": {
+      "Messages": {
+        "1": { "Utc": "2026-06-14T14:11:21Z", "Lap": 12, "Category": "Flag", "Flag": "BLUE", "Scope": "Driver", "Message": "BLUE FLAG FOR CAR 27" },
+        "2": { "Utc": "2026-06-14T14:20:42Z", "Lap": 21, "Category": "Drs", "Message": "DRS ENABLED" }
+      }
+    },
+    "received_at": "2026-06-14T14:24:05Z"
+  },
+  {
+    "topic": "TeamRadio",
+    "payload": {
+      "Captures": {
+        "1": { "Utc": "2026-06-14T14:23:10Z", "RacingNumber": "1", "Path": "demo/arden-radio.mp3" },
+        "2": { "Utc": "2026-06-14T14:24:02Z", "RacingNumber": "14", "Path": "demo/vega-radio.mp3" }
+      }
+    },
+    "received_at": "2026-06-14T14:24:05Z"
+  },
+  {
+    "topic": "TopThree",
+    "payload": { "Lines": { "0": { "RacingNumber": "1", "Tla": "ARD", "TeamColour": "D6FA4B" }, "1": { "RacingNumber": "14", "Tla": "VEG", "TeamColour": "70B8FF" }, "2": { "RacingNumber": "27", "Tla": "SOL", "TeamColour": "FF7369" } } },
+    "received_at": "2026-06-14T14:24:05Z"
+  },
+  {
+    "topic": "CarData.z",
+    "payload": {
+      "Entries": [
+        { "Utc": "2026-06-14T14:24:01.000Z", "Cars": { "1": { "Channels": { "0": 10250, "2": 291, "3": 7, "4": 92, "5": 0, "8": 2 } }, "14": { "Channels": { "0": 10701, "2": 299, "3": 8, "4": 100, "5": 0, "8": 12 } }, "27": { "Channels": { "0": 6900, "2": 170, "3": 4, "4": 31, "5": 48, "8": 2 } } } },
+        { "Utc": "2026-06-14T14:24:01.250Z", "Cars": { "1": { "Channels": { "0": 10802, "2": 301, "3": 8, "4": 100, "5": 0, "8": 12 } }, "14": { "Channels": { "0": 11012, "2": 308, "3": 8, "4": 100, "5": 0, "8": 12 } }, "27": { "Channels": { "0": 6090, "2": 140, "3": 3, "4": 16, "5": 71, "8": 2 } } } },
+        { "Utc": "2026-06-14T14:24:01.500Z", "Cars": { "1": { "Channels": { "0": 9772, "2": 270, "3": 7, "4": 45, "5": 62, "8": 2 } }, "14": { "Channels": { "0": 11200, "2": 318, "3": 8, "4": 100, "5": 0, "8": 12 } }, "27": { "Channels": { "0": 8200, "2": 201, "3": 5, "4": 72, "5": 0, "8": 2 } } } }
+      ]
+    },
+    "received_at": "2026-06-14T14:24:06Z"
+  },
+  {
+    "topic": "Position.z",
+    "payload": {
+      "Entries": [
+        { "Timestamp": "2026-06-14T14:24:01.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1200, "Y": 4200, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1370, "Y": 4130, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1450, "Y": 4010, "Z": 30 } } }
+      ]
+    },
+    "received_at": "2026-06-14T14:24:06Z"
+  }
+]

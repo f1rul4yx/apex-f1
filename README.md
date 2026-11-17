@@ -1,39 +1,49 @@
-# APEX — La Fórmula 1, explicada
+# APEX Pit Wall — F1 en vivo, sin suscripción
 
-Aplicación web independiente para seguir y entender la Fórmula 1: calendario en hora local, clasificación, resultados, resúmenes basados en datos y glosario para nuevos aficionados.
+APEX es una segunda pantalla para seguir una sesión de Fórmula 1 desde tu equipo. Conecta directamente con el flujo de **F1 Live Timing**, muestra los datos más útiles junto a la retransmisión y permite explorar el resto del flujo en JSON.
+
+**Sin paquetes que instalar, compilación, claves ni servicios de pago.** Solo necesitas Python 3.10+ y conexión a internet para los datos.
 
 ## Ejecutar
-
-Solo necesitas Python 3.10 o superior. No hay paquetes que instalar ni proceso de compilación.
 
 ```bash
 python3 server.py
 ```
 
-Abre **http://localhost:3000**. Para usar otro puerto:
+Abre **http://localhost:3000**. Para cambiar el puerto:
 
 ```bash
 python3 server.py --port 8080
 ```
 
-## Datos: OpenF1
+El servidor escucha solo en `127.0.0.1` por defecto, para uso personal en tu equipo. Usa `--host` explícitamente solo si quieres compartirlo en tu red.
 
-[OpenF1](https://openf1.org/docs/) es la única fuente externa de APEX. El servidor utiliza sus endpoints de Grandes Premios, sesiones, resultados, parrilla, campeonato, pilotos, vueltas, posiciones, paradas, tandas y control de carrera.
-
-- La cobertura disponible es **desde 2023**. El selector incluye las temporadas recientes compatibles.
-- Los puntos mostrados son los que publica OpenF1 en `session_result`; no se estiman en el navegador.
-- Las victorias se calculan contando los ganadores de las sesiones de carrera de la temporada. Las victorias de constructores se asignan al equipo con el que el piloto disputó cada carrera.
-- Si `starting_grid` no contiene datos, se usa la primera posición registrada en la carrera como respaldo.
-- Los resúmenes se generan a partir de hechos de los datos: ganador, vuelta más rápida registrada, remontadas, abandonos, paso por boxes, neutralizaciones y compuestos. No se atribuyen intenciones ni causas que los datos no demuestran.
-- El servidor limita las peticiones, espacia las llamadas y guarda respuestas en `.cache/` durante 15 minutos.
-- Si OpenF1 no está disponible, utiliza primero la caché y después las copias de `data/`, marcadas como datos guardados.
-- **No se presentan datos en directo.** Se evita la ventana live de OpenF1 —desde 30 minutos antes hasta 30 minutos después de una carrera—, que requiere suscripción. Cualquier integración futura deberá revisar sus permisos de uso y redistribución.
-
-Para actualizar las copias locales de la temporada configurada:
+### Probar fuera de carrera
 
 ```bash
-python3 scripts/update_snapshot.py
+python3 server.py --demo
 ```
+
+La demostración carga `data/demo-live.json` y está identificada como **REPLAY**. Sus pilotos, equipos, tiempos y audios son ficticios; no depende del estado ni del horario de una carrera real. Los enlaces de audio de la demostración no contienen grabaciones reales.
+
+## Qué ofrece
+
+- **En vivo:** posiciones, intervalos, última vuelta, neumáticos, edad de las tandas, paradas, contador de vueltas, reloj, clima, control de carrera y radios disponibles.
+- **Estrategia:** compuestos, tandas, paradas, sectores y velocidades por piloto.
+- **Piloto:** última telemetría y gráfico de velocidad cuando llega `CarData.z`.
+- **Explorador:** cada categoría recibida, con sus datos originales, búsqueda de campos y descarga JSON.
+
+La fuente no es una API pública documentada ni estable. El acceso anónimo y la cobertura pueden cambiar según la sesión; APEX muestra el estado de la conexión y los errores en lugar de presentar datos guardados como si estuvieran en directo. Está pensado para uso personal; revisa las condiciones de la fuente antes de cualquier otro uso o redistribución.
+
+## Datos y arquitectura
+
+- `live_timing.py`: negociación, WebSocket TLS, protocolo SignalR Core, suscripción y reconexión. No usa OpenF1 para el directo.
+- `live_state.py`: une los cambios parciales sin perder los campos anteriores, descomprime telemetría y normaliza la clasificación.
+- `server.py`: sirve la SPA y la API local. `/api/live` contiene el panel compacto; `/api/live/events` envía avisos por SSE; `/api/live/topic?name=CarData.z` ofrece una categoría concreta. La telemetría voluminosa solo se descarga bajo demanda.
+- `public/`: interfaz responsive sin frameworks ni herramientas de compilación.
+- `f1_data.py` y `/api/season`: adaptador histórico de OpenF1 utilizado solo para apoyar el calendario. Los datos de OpenF1 entre 30 minutos antes y 30 minutos después de una sesión requieren suscripción y no se utilizan para el directo.
+
+Las series de telemetría conservan las últimas **20.000 entradas por categoría** para evitar memoria ilimitada. El explorador lo indica cuando se alcanza ese límite. La memoria se reinicia al reiniciar el servidor.
 
 ## Pruebas
 
@@ -41,14 +51,12 @@ python3 scripts/update_snapshot.py
 python3 -m unittest discover -s tests -v
 ```
 
-Las pruebas usan respuestas simuladas y no consumen la cuota de OpenF1.
+Todas las pruebas usan datos locales o simulados: no necesitan red ni consumen cuota de ninguna fuente.
 
-## Estructura
+Las copias históricas siguen pudiendo actualizarse, únicamente si se necesita ese respaldo:
 
-- `public/`: interfaz responsive, estilos y lógica de la SPA.
-- `f1_data.py`: adaptador de OpenF1, normalización, límite de peticiones y caché.
-- `server.py`: servidor HTTP estático y API local.
-- `data/`: snapshots de respaldo, sin credenciales ni datos personales.
-- `tests/`: pruebas unitarias sin llamadas de red.
+```bash
+python3 scripts/update_snapshot.py [--year AÑO]
+```
 
-APEX es un proyecto de aficionados y no está afiliado con Formula 1, FIA, OpenF1 ni ningún equipo.
+APEX es un proyecto independiente de aficionados y no está afiliado con Formula 1, FIA, OpenF1 ni ningún equipo.
