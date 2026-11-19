@@ -10,6 +10,8 @@ import zlib
 from datetime import datetime, timezone
 from typing import Any
 
+from track_map import TrackMap
+
 MAX_SERIES_ENTRIES = 20000
 TOPIC_LABELS = {
     "TimingDataF1": "Tiempos y posiciones",
@@ -73,10 +75,12 @@ def _bounded(topic: str, data: Any) -> bool:
     if not isinstance(data, dict):
         return False
     truncated = False
-    if topic in {"CarData.z", "Position.z"} and isinstance(data.get("Entries"), list):
-        truncated = len(data["Entries"]) > MAX_SERIES_ENTRIES
-        if truncated:
-            data["Entries"] = data["Entries"][-MAX_SERIES_ENTRIES:]
+    if topic in {"CarData.z", "Position.z"}:
+        key = "Position" if topic == "Position.z" else "Entries"
+        if isinstance(data.get(key), list):
+            truncated = len(data[key]) > MAX_SERIES_ENTRIES
+            if truncated:
+                data[key] = data[key][-MAX_SERIES_ENTRIES:]
     return truncated
 
 
@@ -187,6 +191,7 @@ class LiveState:
         self._feeds: dict[str, Any] = {}
         self._received_at: dict[str, str] = {}
         self._truncated: dict[str, bool] = {}
+        self._track_map = TrackMap()
         self.connection: dict[str, Any] = {
             "status": "connecting", "connected": False, "lastMessageAt": None, "error": None, "source": "F1 Live Timing",
         }
@@ -204,7 +209,17 @@ class LiveState:
             raise ValueError("El mensaje debe contener un objeto o una lista.")
         timestamp = str(received_at or utc_now())
         with self._updated:
+            if topic == "SessionInfo" and isinstance(data, dict):
+                previous_key = self._feeds.get("SessionInfo", {}).get("Key")
+                incoming_key = data.get("Key")
+                if previous_key is not None and incoming_key is not None and str(previous_key) != str(incoming_key):
+                    self._feeds.clear()
+                    self._received_at.clear()
+                    self._truncated.clear()
+                    self._track_map.reset()
             self._feeds[topic] = deep_merge(self._feeds.get(topic, {}), data)
+            if topic == "Position.z":
+                self._track_map.update(data, timestamp)
             truncated = _bounded(topic, self._feeds[topic])
             self._truncated[topic] = bool(self._truncated.get(topic, False) or truncated)
             self._received_at[topic] = timestamp
@@ -229,6 +244,10 @@ class LiveState:
                 "truncated": self._truncated.get(topic, False),
                 "revision": self.revision,
             }
+
+    def track_snapshot(self) -> dict[str, Any]:
+        with self._lock:
+            return self._track_map.snapshot(timing_rows(self._feeds))
 
     def snapshot(self) -> dict[str, Any]:
         with self._lock:

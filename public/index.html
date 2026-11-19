@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
+    <script src="/track-map.js" defer></script>
     <script src="/app.js" defer></script>
   </head>
   <body>
@@ -23,7 +24,8 @@
       <nav class="main-nav" aria-label="Vistas">
         <button class="nav-link active" data-view="timing" type="button"><span class="nav-number">01</span>En vivo</button>
         <button class="nav-link" data-view="strategy" type="button"><span class="nav-number">02</span>Estrategia</button>
-        <button class="nav-link" data-view="explorer" type="button"><span class="nav-number">03</span>Explorador <span id="topic-count" class="topic-count"></span></button>
+        <button class="nav-link" data-view="map" type="button"><span class="nav-number">03</span>Mapa</button>
+        <button class="nav-link" data-view="explorer" type="button"><span class="nav-number">04</span>Explorador <span id="topic-count" class="topic-count"></span></button>
       </nav>
       <div class="header-tools">
         <span class="connection-badge" id="connection-badge" role="status"><span class="status-dot"></span><span id="connection-label">INICIANDO</span></span>

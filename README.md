@@ -31,7 +31,10 @@ La demostración carga `data/demo-live.json` y está identificada como **REPLAY*
 - **En vivo:** posiciones, intervalos, última vuelta, neumáticos, edad de las tandas, paradas, contador de vueltas, reloj, clima, control de carrera y radios disponibles.
 - **Estrategia:** compuestos, tandas, paradas, sectores y velocidades por piloto.
 - **Piloto:** última telemetría y gráfico de velocidad cuando llega `CarData.z`.
+- **Mapa:** trazado generado automáticamente con las trayectorias de `Position.z` y coches con el color de su equipo. Permite enfocar un piloto o abrir su telemetría; no requiere imágenes ni configuración por circuito.
 - **Explorador:** cada categoría recibida, con sus datos originales, búsqueda de campos y descarga JSON.
+
+El mapa puede empezar incompleto y necesitar alrededor de una vuelta para formarse. Es una representación a escala de las coordenadas recibidas, no un mapa geográfico con orientación norte-sur ni curvas numeradas. Solo aparecerá si la sesión proporciona posiciones.
 
 La fuente no es una API pública documentada ni estable. El acceso anónimo y la cobertura pueden cambiar según la sesión; APEX muestra el estado de la conexión y los errores en lugar de presentar datos guardados como si estuvieran en directo. Está pensado para uso personal; revisa las condiciones de la fuente antes de cualquier otro uso o redistribución.
 

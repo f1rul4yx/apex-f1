@@ -40,6 +40,14 @@ async function api(path) {
   return data;
 }
 
+const trackMapView = window.ApexTrackMap({
+  mount: main, api, escape: h, colour,
+  drivers: () => state.live?.drivers || [],
+  header: () => `${sessionHero()}${notices()}`,
+  time: timestamp,
+  sessionName: sessionTitle,
+});
+
 function toast(message) {
   const element = $("#toast");
   element.textContent = message;
@@ -286,6 +294,7 @@ function render() {
   if (state.view === "explorer" && document.activeElement?.matches("[data-raw-search]")) return;
   if (state.view === "timing") renderTiming();
   else if (state.view === "strategy") renderStrategy();
+  else if (state.view === "map") trackMapView.render();
   else renderExplorer();
 }
 
@@ -321,6 +330,7 @@ function connectEvents() {
   if (!button) return;
   if (button.dataset.view) { state.view = button.dataset.view; window.scrollTo({ top: 0, behavior: "instant" }); render(); }
   if (button.dataset.sidebar) { state.sidebar = button.dataset.sidebar; render(); }
+  if (button.dataset.mapFocus) trackMapView.focus(button.dataset.mapFocus);
   if (button.dataset.topic) {
     state.view = "explorer"; state.topic = button.dataset.topic; state.rawSearch = ""; state.raw = null; renderExplorer(); updateHeader();
   }
@@ -337,11 +347,11 @@ function connectEvents() {
   if (button.classList.contains("dialog-close")) $("#driver-dialog").close();
 });
 document.querySelector("main").addEventListener("click", (event) => {
-  const row = event.target.closest("tr[data-driver]");
+  const row = event.target.closest("[data-driver]");
   if (row) openDriver(row.dataset.driver);
 });
 document.querySelector("main").addEventListener("keydown", (event) => {
-  const row = event.target.closest("tr[data-driver]");
+  const row = event.target.closest("[data-driver]");
   if (row && ["Enter", " "].includes(event.key)) { event.preventDefault(); openDriver(row.dataset.driver); }
 });
 document.addEventListener("input", (event) => {

@@ -72,6 +72,8 @@ class ApexHandler(SimpleHTTPRequestHandler):
                 return self._json({"status": "ok", "connection": live.connection})
             if parsed.path == "/api/live":
                 return self._json(live.snapshot())
+            if parsed.path == "/api/live/track":
+                return self._json(live.track_snapshot())
             if parsed.path == "/api/live/topic":
                 topic = query.get("name", [""])[0]
                 if len(topic) > 100:

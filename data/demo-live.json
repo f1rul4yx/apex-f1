@@ -130,10 +130,33 @@
   {
     "topic": "Position.z",
     "payload": {
-      "Entries": [
-        { "Timestamp": "2026-06-14T14:24:01.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1200, "Y": 4200, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1370, "Y": 4130, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1450, "Y": 4010, "Z": 30 } } }
+      "Position": [
+        { "Timestamp": "2026-06-14T14:24:01.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 2000, "Y": 1000, "Z": 30 }, "14": { "Status": "OnTrack", "X": 4400, "Y": 5900, "Z": 30 }, "27": { "Status": "OnTrack", "X": 300, "Y": 1700, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:02.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 3200, "Y": 800, "Z": 30 }, "14": { "Status": "OnTrack", "X": 3300, "Y": 5500, "Z": 30 }, "27": { "Status": "OnTrack", "X": 900, "Y": 1100, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:03.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 4300, "Y": 1100, "Z": 30 }, "14": { "Status": "OnTrack", "X": 2600, "Y": 5800, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1600, "Y": 1700, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:04.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 5400, "Y": 1700, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1500, "Y": 5400, "Z": 30 }, "27": { "Status": "OnTrack", "X": 2000, "Y": 2200, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:05.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 5800, "Y": 2800, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1200, "Y": 4600, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1700, "Y": 2600, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:06.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 5400, "Y": 3600, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1600, "Y": 3900, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1500, "Y": 2100, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:07.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 6000, "Y": 4600, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1200, "Y": 3200, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1400, "Y": 1500, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:08.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 5600, "Y": 5700, "Z": 30 }, "14": { "Status": "OnTrack", "X": 500, "Y": 2600, "Z": 30 }, "27": { "Status": "OnTrack", "X": 2000, "Y": 1000, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:09.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 4400, "Y": 5900, "Z": 30 }, "14": { "Status": "OnTrack", "X": 300, "Y": 1700, "Z": 30 }, "27": { "Status": "OnTrack", "X": 3200, "Y": 800, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:10.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 3300, "Y": 5500, "Z": 30 }, "14": { "Status": "OnTrack", "X": 900, "Y": 1100, "Z": 30 }, "27": { "Status": "OnTrack", "X": 4300, "Y": 1100, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:11.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 2600, "Y": 5800, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1600, "Y": 1700, "Z": 30 }, "27": { "Status": "OnTrack", "X": 5400, "Y": 1700, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:12.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1500, "Y": 5400, "Z": 30 }, "14": { "Status": "OnTrack", "X": 2000, "Y": 2200, "Z": 30 }, "27": { "Status": "OnTrack", "X": 5800, "Y": 2800, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:13.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1200, "Y": 4600, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1700, "Y": 2600, "Z": 30 }, "27": { "Status": "OnTrack", "X": 5400, "Y": 3600, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:14.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1600, "Y": 3900, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1500, "Y": 2100, "Z": 30 }, "27": { "Status": "OnTrack", "X": 6000, "Y": 4600, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:15.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1200, "Y": 3200, "Z": 30 }, "14": { "Status": "OnTrack", "X": 1400, "Y": 1500, "Z": 30 }, "27": { "Status": "OnTrack", "X": 5600, "Y": 5700, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:16.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 500, "Y": 2600, "Z": 30 }, "14": { "Status": "OnTrack", "X": 2000, "Y": 1000, "Z": 30 }, "27": { "Status": "OnTrack", "X": 4400, "Y": 5900, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:17.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 300, "Y": 1700, "Z": 30 }, "14": { "Status": "OnTrack", "X": 3200, "Y": 800, "Z": 30 }, "27": { "Status": "OnTrack", "X": 3300, "Y": 5500, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:18.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 900, "Y": 1100, "Z": 30 }, "14": { "Status": "OnTrack", "X": 4300, "Y": 1100, "Z": 30 }, "27": { "Status": "OnTrack", "X": 2600, "Y": 5800, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:19.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1600, "Y": 1700, "Z": 30 }, "14": { "Status": "OnTrack", "X": 5400, "Y": 1700, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1500, "Y": 5400, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:20.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 2000, "Y": 2200, "Z": 30 }, "14": { "Status": "OnTrack", "X": 5800, "Y": 2800, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1200, "Y": 4600, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:21.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1700, "Y": 2600, "Z": 30 }, "14": { "Status": "OnTrack", "X": 5400, "Y": 3600, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1600, "Y": 3900, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:22.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1500, "Y": 2100, "Z": 30 }, "14": { "Status": "OnTrack", "X": 6000, "Y": 4600, "Z": 30 }, "27": { "Status": "OnTrack", "X": 1200, "Y": 3200, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:23.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 1400, "Y": 1500, "Z": 30 }, "14": { "Status": "OnTrack", "X": 5600, "Y": 5700, "Z": 30 }, "27": { "Status": "OnTrack", "X": 500, "Y": 2600, "Z": 30 } } },
+        { "Timestamp": "2026-06-14T14:24:24.000Z", "Entries": { "1": { "Status": "OnTrack", "X": 2000, "Y": 1000, "Z": 30 }, "14": { "Status": "OnTrack", "X": 4400, "Y": 5900, "Z": 30 }, "27": { "Status": "OnTrack", "X": 300, "Y": 1700, "Z": 30 } } }
       ]
     },
-    "received_at": "2026-06-14T14:24:06Z"
+    "received_at": "2026-06-14T14:24:24Z"
   }
 ]
