@@ -12,7 +12,8 @@ const state = {
   rawSearch: "",
   driver: null,
 };
-let refreshTimer;
+let refreshTimer = null;
+let lastRefreshAt = 0;
 let refreshInFlight = false;
 let queuedRefresh = false;
 let topicRequest = 0;
@@ -43,9 +44,16 @@ async function api(path) {
 const trackMapView = window.ApexTrackMap({
   mount: main, api, escape: h, colour,
   drivers: () => state.live?.drivers || [],
+  connected: () => Boolean(state.live?.connection?.connected),
+  hasPositionFeed: () => Boolean(state.live?.catalog?.some((topic) => topic.name === "Position.z")),
   header: () => `${sessionHero()}${notices()}`,
   time: timestamp,
   sessionName: sessionTitle,
+});
+
+const radioPlayer = window.ApexRadioPlayer({
+  panel: document.querySelector("#radio-player"),
+  onError: toast,
 });
 
 function toast(message) {
@@ -140,7 +148,7 @@ function lapPanel() {
   const clock = state.live.feeds.ExtrapolatedClock || {};
   const current = Number(lap.CurrentLap) || 0;
   const total = Number(lap.TotalLap) || Number(lap.TotalLaps) || 0;
-  return `<section class="panel"><div class="panel-heading"><h2 class="panel-title">Carrera</h2><span class="card-label">LIVE / ${h(state.live.feeds.SessionStatus?.Status || "—")}</span></div>
+  return `<section class="panel" id="lap-panel"><div class="panel-heading"><h2 class="panel-title">Carrera</h2><span class="card-label">LIVE / ${h(state.live.feeds.SessionStatus?.Status || "—")}</span></div>
     <div class="lap-counter"><span class="lap-current">${h(field(lap, "CurrentLap"))}</span><span class="lap-total"> / ${h(field(lap, "TotalLaps", "?"))}</span><div class="progress-track"><span style="width:${total ? Math.min(100, current / total * 100) : 0}%"></span></div></div>
     <div class="clock-row"><span>Restante</span><strong>${h(field(clock, "Remaining"))}</strong></div><div class="clock-row"><span>En pista</span><strong>${h(field(clock, "ElapsedTrackTime", field(clock, "Elapsed")))}</strong></div>
   </section>`;
@@ -149,7 +157,7 @@ function lapPanel() {
 function weatherPanel() {
   const weather = state.live.feeds.WeatherData || {};
   const metrics = [["Aire", "AirTemp", "°C"], ["Pista", "TrackTemp", "°C"], ["Humedad", "Humidity", "%"], ["Viento", "WindSpeed", " km/h"]];
-  return `<section class="panel"><div class="panel-heading"><h2 class="panel-title">Condiciones</h2><span class="card-label">${weather.Rainfall === "1" ? "LLUVIA" : "PISTA"}</span></div>
+  return `<section class="panel" id="weather-panel"><div class="panel-heading"><h2 class="panel-title">Condiciones</h2><span class="card-label">${weather.Rainfall === "1" ? "LLUVIA" : "PISTA"}</span></div>
     <div class="weather-grid">${metrics.map(([label, key, unit]) => `<div><span class="card-label">${label}</span><strong class="weather-value">${h(field(weather, key))}<span class="weather-unit">${unit}</span></strong></div>`).join("")}</div><div class="clock-row"><span>Dirección del viento</span><strong>${h(field(weather, "WindDirection"))}°</strong></div></section>`;
 }
 
@@ -163,24 +171,48 @@ function radioUrl(capture) {
   if (!path || !capture.Path || !/^[\w./-]+$/i.test(capture.Path)) return "";
   try { return new URL(`${path}${capture.Path}`, "https://livetiming.formula1.com/static/").href; } catch { return ""; }
 }
+function radioKey(capture) {
+  return `${capture.Utc || capture.Path || JSON.stringify(capture)}|${capture.RacingNumber || ""}`;
+}
 function eventsPanel() {
   const isControl = state.sidebar === "control";
   const rows = sortedMessages(state.sidebar);
   const items = isControl ? rows.map((message) => `<article class="message"><div class="message-meta"><span>${h(timestamp(message.Utc))}</span>${message.Lap ? `<span>VUELTA ${h(message.Lap)}</span>` : ""}${message.Flag ? `<span class="message-flag">${h(message.Flag)}</span>` : ""}${message.Category ? `<span>${h(message.Category)}</span>` : ""}</div><div class="message-text">${h(message.Message || message.Status || "Mensaje recibido")}</div></article>`).join("") : rows.map((capture) => {
     const driver = state.live.feeds.DriverList?.[String(capture.RacingNumber)] || {};
     const src = radioUrl(capture);
-    return `<article class="radio-item"><div class="message-meta"><span>${h(timestamp(capture.Utc))}</span><span class="driver-number">${h(driver.Tla || capture.RacingNumber || "EQUIPO")}</span></div><div class="message-text">${h(driver.FullName || `Coche ${capture.RacingNumber || "—"}`)}</div>${src ? `<audio controls preload="none" src="${h(src)}">Tu navegador no puede reproducir esta radio.</audio>` : '<div class="secondary-value">Audio no disponible</div>'}</article>`;
+    const key = radioKey(capture);
+    const label = `${driver.Tla || capture.RacingNumber || "Radio"} · ${timestamp(capture.Utc)}`;
+    return `<article class="radio-item" data-radio-key="${h(key)}"><div class="message-meta"><span>${h(timestamp(capture.Utc))}</span><span class="driver-number">${h(driver.Tla || capture.RacingNumber || "EQUIPO")}</span></div><div class="message-text">${h(driver.FullName || `Coche ${capture.RacingNumber || "—"}`)}</div>${src ? `<button class="radio-play" type="button" data-radio-src="${h(src)}" data-radio-title="${h(label)}">▶ Escuchar radio</button>` : '<div class="secondary-value">Audio no disponible</div>'}</article>`;
   }).join("");
-  return `<section class="panel"><div class="panel-heading"><h2 class="panel-title">Lo que no sale</h2><div class="sidebar-tabs"><button type="button" data-sidebar="control" class="${isControl ? "active" : ""}">CONTROL</button><button type="button" data-sidebar="radio" class="${!isControl ? "active" : ""}">RADIO</button></div></div>
-    <div class="${isControl ? "messages" : "radio-list"}">${items || `<div class="empty-state"><h3>Sin mensajes</h3><p>Los mensajes de ${isControl ? "dirección de carrera" : "radio de equipo"} aparecerán cuando se reciban.</p></div>`}</div></section>`;
+  return `<section class="panel" id="events-panel" data-sidebar="${state.sidebar}" data-session="${h(sessionInfo().Key || "")}"><div class="panel-heading"><h2 class="panel-title">Lo que no sale</h2><div class="sidebar-tabs"><button type="button" data-sidebar="control" class="${isControl ? "active" : ""}">CONTROL</button><button type="button" data-sidebar="radio" class="${!isControl ? "active" : ""}">RADIO</button></div></div>
+    <div class="${isControl ? "messages" : "radio-list"}" ${isControl ? "" : 'id="radio-list"'}>${items || `<div class="empty-state"><h3>Sin mensajes</h3><p>Los mensajes de ${isControl ? "dirección de carrera" : "radio de equipo"} aparecerán cuando se reciban.</p></div>`}</div></section>`;
 }
 
 function renderTiming() {
   const drivers = state.live.drivers || [];
   const panels = `<div class="sidebar-stack">${lapPanel()}${weatherPanel()}${eventsPanel()}</div>`;
-  main.innerHTML = `<div class="app-shell">${sessionHero()}${notices()}<div class="dashboard"><section class="panel"><div class="panel-heading"><div><p class="card-label">POSICIONES EN PISTA</p><h2 class="panel-title">Clasificación en vivo</h2></div><span class="panel-meta">${drivers.length} COCHES · ${h(timestamp(state.live.connection.lastMessageAt))}</span></div>
+  const markup = `<div class="app-shell" id="timing-view">${sessionHero()}<div id="live-notices">${notices()}</div><div class="dashboard"><section class="panel" id="timing-main"><div class="panel-heading"><div><p class="card-label">POSICIONES EN PISTA</p><h2 class="panel-title">Clasificación en vivo</h2></div><span class="panel-meta">${drivers.length} COCHES · ${h(timestamp(state.live.connection.lastMessageAt))}</span></div>
     ${drivers.length ? timingTable(drivers) : `<div class="empty-state"><span class="empty-symbol">P_</span><h2>La pista habla aquí</h2><p>Mantén APEX abierto al empezar la sesión. Posiciones, diferencias, neumáticos, mensajes de control y mucho más aparecerán cuando lleguen los datos.</p>${!drivers.length && !state.live.catalog.length ? nextSessionCard() : ""}</div>`}
     <div class="empty-note">Pulsa un piloto para consultar sus sectores, velocidades y telemetría. Las diferencias y las banderas se muestran tal y como las envía la fuente; no son resultados oficiales hasta la clasificación final.</div></section>${panels}</div></div>`;
+  if (!$("#timing-view")) {
+    main.innerHTML = markup;
+    return;
+  }
+  const template = document.createElement("template");
+  template.innerHTML = markup;
+  for (const selector of [".session-hero", "#live-notices", "#timing-main", "#lap-panel", "#weather-panel"]) {
+    const current = main.querySelector(selector);
+    const next = template.content.querySelector(selector);
+    if (current && next) current.replaceWith(next);
+  }
+  const currentEvents = $("#events-panel");
+  const nextEvents = template.content.querySelector("#events-panel");
+  if (!currentEvents || !nextEvents) return;
+  if (state.sidebar === "radio" && currentEvents.dataset.sidebar === "radio" && currentEvents.dataset.session === nextEvents.dataset.session) {
+    radioPlayer.updateList(currentEvents.querySelector("#radio-list"), nextEvents.querySelector("#radio-list"));
+  } else {
+    currentEvents.replaceWith(nextEvents);
+  }
 }
 
 function sectorCell(sector) {
@@ -312,22 +344,37 @@ async function refresh() {
   }
 }
 function scheduleRefresh() {
-  clearTimeout(refreshTimer);
-  refreshTimer = setTimeout(refresh, 600);
+  // Límite estable por vista. Si ya pasó el mínimo, se refresca en el acto
+  // para no añadir la latencia de un temporizador a cada mensaje.
+  const minimum = { timing: 120, map: 250, strategy: 400, explorer: 1200 }[state.view] ?? 200;
+  const wait = lastRefreshAt + minimum - performance.now();
+  if (wait <= 0) {
+    if (refreshTimer !== null) { clearTimeout(refreshTimer); refreshTimer = null; }
+    lastRefreshAt = performance.now();
+    refresh();
+    return;
+  }
+  if (refreshTimer !== null) return;
+  refreshTimer = setTimeout(() => {
+    refreshTimer = null;
+    lastRefreshAt = performance.now();
+    refresh();
+  }, wait);
 }
 async function loadCalendar() {
   try { state.calendar = await api(`/api/season?year=${new Date().getUTCFullYear()}`); if (state.view === "timing" && !state.live?.drivers.length) render(); }
   catch { /* OpenF1 histórico es opcional; el directo no depende de él. */ }
 }
 function connectEvents() {
-  if (!("EventSource" in window)) { setInterval(refresh, 3000); return; }
+  if (!("EventSource" in window)) { setInterval(scheduleRefresh, 3000); return; }
   const events = new EventSource("/api/live/events");
   events.addEventListener("update", scheduleRefresh);
 }
 
- document.addEventListener("click", (event) => {
+document.addEventListener("click", (event) => {
   const button = event.target.closest("button");
   if (!button) return;
+  if (button.dataset.radioSrc) radioPlayer.play(button.dataset.radioSrc, button.dataset.radioTitle);
   if (button.dataset.view) { state.view = button.dataset.view; window.scrollTo({ top: 0, behavior: "instant" }); render(); }
   if (button.dataset.sidebar) { state.sidebar = button.dataset.sidebar; render(); }
   if (button.dataset.mapFocus) trackMapView.focus(button.dataset.mapFocus);
@@ -369,4 +416,4 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) refr
 refresh();
 loadCalendar();
 connectEvents();
-setInterval(refresh, 5000);
+setInterval(scheduleRefresh, 5000);

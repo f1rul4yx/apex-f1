@@ -36,6 +36,8 @@ La demostración carga `data/demo-live.json` y está identificada como **REPLAY*
 
 El mapa puede empezar incompleto y necesitar alrededor de una vuelta para formarse. Es una representación a escala de las coordenadas recibidas, no un mapa geográfico con orientación norte-sur ni curvas numeradas. Solo aparecerá si la sesión proporciona posiciones.
 
+En el acceso anónimo y gratuito, F1 no envía `Position.z` ni `CarData.z`, aunque el resto del cronometraje llega con normalidad. Las posiciones y la telemetría de coche quedan reservadas a cuentas con suscripción de F1 TV. Por eso la vista **Mapa** lo indica y no dibuja un trazado inventado, y la telemetría detallada del piloto tampoco estará disponible. Es una limitación de la fuente, no un fallo de la interfaz.
+
 La fuente no es una API pública documentada ni estable. El acceso anónimo y la cobertura pueden cambiar según la sesión; APEX muestra el estado de la conexión y los errores en lugar de presentar datos guardados como si estuvieran en directo. Está pensado para uso personal; revisa las condiciones de la fuente antes de cualquier otro uso o redistribución.
 
 ## Datos y arquitectura

@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
     <script src="/track-map.js" defer></script>
+    <script src="/radio-player.js" defer></script>
     <script src="/app.js" defer></script>
   </head>
   <body>
@@ -39,6 +40,11 @@
       <span><span class="footer-pulse"></span> DATOS DIRECTOS · SIN SERVICIOS DE PAGO · USO PERSONAL</span>
       <span>Fuente experimental no oficial. APEX no está afiliado con Formula 1, FIA ni los equipos.</span>
     </footer>
+    <section id="radio-player" class="radio-player" aria-label="Reproductor de radio" hidden>
+      <div class="radio-player-label"><span>RADIO DE EQUIPO</span><strong data-radio-title>Reproduciendo radio</strong></div>
+      <audio controls preload="auto"></audio>
+      <button class="radio-player-close" data-radio-close type="button" aria-label="Cerrar reproductor">×</button>
+    </section>
     <dialog id="driver-dialog" aria-labelledby="driver-title" class="driver-dialog">
       <button class="dialog-close" type="button" aria-label="Cerrar">×</button>
       <div id="driver-content"></div>

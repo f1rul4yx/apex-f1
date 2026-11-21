@@ -116,7 +116,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .message-text { color: #d2d8ce; }
 .radio-list { max-height: 320px; overflow-y: auto; }
 .radio-item { padding: 12px 15px; border-bottom: 1px solid var(--line); }
-.radio-item audio { width: 100%; height: 27px; margin-top: 8px; }
+.radio-play { width: 100%; margin-top: 9px; padding: 7px 10px; border: 1px solid #44523a; border-radius: 4px; color: var(--text); background: #1d251a; font: 600 11px var(--body); text-align: left; }
+.radio-play:hover { border-color: var(--accent); color: var(--accent); }
 .sidebar-tabs { display: flex; margin-left: auto; gap: 8px; }
 .sidebar-tabs button { padding: 3px 0; border: 0; color: var(--muted); background: none; font: 9px var(--mono); }
 .sidebar-tabs button.active { color: var(--accent); }
@@ -191,6 +192,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .app-footer { display: flex; max-width: 1500px; padding: 20px 32px 24px; margin: auto; border-top: 1px solid var(--line); justify-content: space-between; gap: 24px; color: #748071; font: 9px/1.7 var(--mono); }
 .app-footer > span:first-child { color: #9dac92; }
 .footer-pulse { display: inline-block; margin-right: 3px; background: var(--accent); }
+.radio-player { position: fixed; z-index: 80; bottom: 20px; left: 20px; display: grid; width: min(600px, calc(100% - 40px)); padding: 13px 15px; border: 1px solid #536441; border-radius: 7px; align-items: center; grid-template-columns: minmax(100px, 1fr) minmax(180px, 260px) 26px; gap: 13px; background: #202c1b; box-shadow: 0 10px 45px #0009; }
+.radio-player-label { min-width: 0; }
+.radio-player-label span { display: block; color: var(--accent); font: 9px var(--mono); letter-spacing: 1px; }
+.radio-player-label strong { display: block; overflow: hidden; margin-top: 5px; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.radio-player audio { width: 100%; height: 31px; }
+.radio-player-close { padding: 0; border: 0; color: var(--muted); background: transparent; font-size: 24px; }
+.radio-player-close:hover { color: var(--text); }
 .driver-dialog { width: min(670px, calc(100% - 28px)); max-height: 88vh; padding: 30px; border: 1px solid #485241; border-radius: 10px; color: var(--text); background: var(--surface); box-shadow: 0 40px 100px #0009; }
 .driver-dialog::backdrop { background: #050805cc; backdrop-filter: blur(4px); }
 .dialog-close { position: absolute; top: 12px; right: 15px; border: 0; color: var(--muted); background: none; font-size: 25px; }
@@ -268,6 +276,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .map-driver-item:nth-child(even) { border-right: 0; }
   .track-stage { min-height: 300px; }
   .map-legend { align-items: flex-start; flex-direction: column; gap: 6px; }
+}
+@media (max-width: 560px) {
+  .radio-player { bottom: 10px; left: 10px; width: calc(100% - 20px); grid-template-columns: 1fr 24px; gap: 8px 14px; }
+  .radio-player audio { grid-row: 2; grid-column: 1 / -1; }
+  .radio-player-close { grid-row: 1; grid-column: 2; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
